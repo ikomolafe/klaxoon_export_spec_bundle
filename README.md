@@ -11,19 +11,20 @@ Recommended downloads are published on the GitHub Releases page for tagged versi
 Repo download locations:
 - tagged releases: GitHub `Releases`
 - branch builds: GitHub Actions artifact from the `release-bundles` workflow
+- committed download folder in this repo: [`release/assets/`](release/assets/)
 - local source checkout builds: `release/installers/` and `release/assets/`
 
 Installer files:
-- Windows: `KlaxoonBulkExport-<version>-windows-x64-installer.zip`
-- Linux: `klaxoon-bulk-export_<version>_linux-x64.deb`
-- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64.pkg`
-- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64.pkg`
+- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-installer.zip`](release/assets/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip)
+- Linux: [`klaxoon-bulk-export_0.1.1_linux-x64.deb`](release/assets/klaxoon-bulk-export_0.1.1_linux-x64.deb)
+- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64.pkg`](release/assets/KlaxoonBulkExport-0.1.1-macos-arm64.pkg)
+- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64.pkg`](release/assets/KlaxoonBulkExport-0.1.1-macos-x64.pkg)
 
 Raw bundle files:
-- Windows: `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`
-- Linux: `KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz`
-- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64-bundle.tar.gz`
-- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64-bundle.tar.gz`
+- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip`](release/assets/KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip)
+- Linux: [`KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz)
+- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz)
+- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz)
 
 ## Fastest Path
 

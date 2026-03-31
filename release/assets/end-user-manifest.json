@@ -1,0 +1,247 @@
+{
+  "version": "0.1.1",
+  "extensionId": "hkkniaifdcccdnfoahdnoheieoenogoj",
+  "createdAt": "2026-03-31T20:17:00.769Z",
+  "bundles": [
+    {
+      "bundleId": "windows-x64",
+      "rid": "win-x64",
+      "helperBinary": "release/end-user/windows-x64/native-helper/Klaxoon.NativeHelper.exe",
+      "path": "release/end-user/windows-x64",
+      "signed": false,
+      "stripped": false,
+      "files": [
+        {
+          "path": "browser-extension/build-metadata.json",
+          "sha256": "79b36679066d363fd93f62ee65212342483dcb1407221d36fef218aab2483697",
+          "size": 97
+        },
+        {
+          "path": "browser-extension/dist/background/index.js",
+          "sha256": "3551b223233fa9a5f40f1971718aeae90263e720cae32934fb10085cfbf4d775",
+          "size": 92139
+        },
+        {
+          "path": "browser-extension/dist/content/exportAutomation.js",
+          "sha256": "fd166368a81415bc41670ec7badf0be6a718247eb18cc0f649cf94224255540f",
+          "size": 4128
+        },
+        {
+          "path": "browser-extension/dist/sidepanel/index.js",
+          "sha256": "9664d648f421cf84c02a65f6fd8ded202fb9ae912649bbc36f6ca5f288de808f",
+          "size": 168079
+        },
+        {
+          "path": "browser-extension/manifest.json",
+          "sha256": "8a0ef3cf36a50905fb297328ff157d87f0606cd4b948598e63c045f3b0e75449",
+          "size": 1004
+        },
+        {
+          "path": "browser-extension/sidepanel.html",
+          "sha256": "0355822d2f42000ecabb610b1fafa537058ece0247c97b8b96ff0103b94a5523",
+          "size": 316
+        },
+        {
+          "path": "install.ps1",
+          "sha256": "34310d85277de7798b9b86d29af9d0a64682ef564b2153b5e86163d5173ac55b",
+          "size": 2247
+        },
+        {
+          "path": "manifest-template.json",
+          "sha256": "5a493bd2ddbd5de9d0c2adf15b3f9cf009524f997d526ae01dbcf284579c0670",
+          "size": 232
+        },
+        {
+          "path": "native-helper/Klaxoon.NativeHelper.exe",
+          "sha256": "51e5f310be41623ecce79430c780101e3a970e4918ad268c8202085b601a41cd",
+          "size": 67552167
+        },
+        {
+          "path": "RELEASE.txt",
+          "sha256": "c3e2994a3a43394c62b6ac8816d7784fa7deec8eb4014e452fdcfe50507624cb",
+          "size": 664
+        }
+      ]
+    },
+    {
+      "bundleId": "linux-x64",
+      "rid": "linux-x64",
+      "helperBinary": "release/end-user/linux-x64/native-helper/Klaxoon.NativeHelper",
+      "path": "release/end-user/linux-x64",
+      "signed": false,
+      "stripped": false,
+      "files": [
+        {
+          "path": "browser-extension/build-metadata.json",
+          "sha256": "79b36679066d363fd93f62ee65212342483dcb1407221d36fef218aab2483697",
+          "size": 97
+        },
+        {
+          "path": "browser-extension/dist/background/index.js",
+          "sha256": "3551b223233fa9a5f40f1971718aeae90263e720cae32934fb10085cfbf4d775",
+          "size": 92139
+        },
+        {
+          "path": "browser-extension/dist/content/exportAutomation.js",
+          "sha256": "fd166368a81415bc41670ec7badf0be6a718247eb18cc0f649cf94224255540f",
+          "size": 4128
+        },
+        {
+          "path": "browser-extension/dist/sidepanel/index.js",
+          "sha256": "9664d648f421cf84c02a65f6fd8ded202fb9ae912649bbc36f6ca5f288de808f",
+          "size": 168079
+        },
+        {
+          "path": "browser-extension/manifest.json",
+          "sha256": "8a0ef3cf36a50905fb297328ff157d87f0606cd4b948598e63c045f3b0e75449",
+          "size": 1004
+        },
+        {
+          "path": "browser-extension/sidepanel.html",
+          "sha256": "0355822d2f42000ecabb610b1fafa537058ece0247c97b8b96ff0103b94a5523",
+          "size": 316
+        },
+        {
+          "path": "install.sh",
+          "sha256": "53cf36b2f4d510c4ec7562d84fd80f9f147b077b8dee75a85659469609d60f31",
+          "size": 2282
+        },
+        {
+          "path": "manifest-template.json",
+          "sha256": "5a493bd2ddbd5de9d0c2adf15b3f9cf009524f997d526ae01dbcf284579c0670",
+          "size": 232
+        },
+        {
+          "path": "native-helper/Klaxoon.NativeHelper",
+          "sha256": "be78c85daaf9b130b96fcf0f3f7f6ed2f66f9f1b53ccfa17137f5c3a0b9235a0",
+          "size": 66861064
+        },
+        {
+          "path": "RELEASE.txt",
+          "sha256": "56a8a868ac679ecc6ce2c1a2a327239d41d3d9d1286671e3bf76141ac8299e3a",
+          "size": 664
+        }
+      ]
+    },
+    {
+      "bundleId": "macos-arm64",
+      "rid": "osx-arm64",
+      "helperBinary": "release/end-user/macos-arm64/native-helper/Klaxoon.NativeHelper",
+      "path": "release/end-user/macos-arm64",
+      "signed": false,
+      "stripped": true,
+      "files": [
+        {
+          "path": "browser-extension/build-metadata.json",
+          "sha256": "79b36679066d363fd93f62ee65212342483dcb1407221d36fef218aab2483697",
+          "size": 97
+        },
+        {
+          "path": "browser-extension/dist/background/index.js",
+          "sha256": "3551b223233fa9a5f40f1971718aeae90263e720cae32934fb10085cfbf4d775",
+          "size": 92139
+        },
+        {
+          "path": "browser-extension/dist/content/exportAutomation.js",
+          "sha256": "fd166368a81415bc41670ec7badf0be6a718247eb18cc0f649cf94224255540f",
+          "size": 4128
+        },
+        {
+          "path": "browser-extension/dist/sidepanel/index.js",
+          "sha256": "9664d648f421cf84c02a65f6fd8ded202fb9ae912649bbc36f6ca5f288de808f",
+          "size": 168079
+        },
+        {
+          "path": "browser-extension/manifest.json",
+          "sha256": "8a0ef3cf36a50905fb297328ff157d87f0606cd4b948598e63c045f3b0e75449",
+          "size": 1004
+        },
+        {
+          "path": "browser-extension/sidepanel.html",
+          "sha256": "0355822d2f42000ecabb610b1fafa537058ece0247c97b8b96ff0103b94a5523",
+          "size": 316
+        },
+        {
+          "path": "install.sh",
+          "sha256": "710e08740960ff506b8beae23059eb0f3387db6b8dad2ce99a6a5b30112e2ece",
+          "size": 2286
+        },
+        {
+          "path": "manifest-template.json",
+          "sha256": "5a493bd2ddbd5de9d0c2adf15b3f9cf009524f997d526ae01dbcf284579c0670",
+          "size": 232
+        },
+        {
+          "path": "native-helper/Klaxoon.NativeHelper",
+          "sha256": "0f7d4e0b2df4cface265d51abbd799b37e948cf037360b5a9d27d3853ff7705c",
+          "size": 6796976
+        },
+        {
+          "path": "RELEASE.txt",
+          "sha256": "5ae1bcf4ec43eb3b17ddcaae68b4f25ae23e367fc67322c76e64086c082fd6f8",
+          "size": 666
+        }
+      ]
+    },
+    {
+      "bundleId": "macos-x64",
+      "rid": "osx-x64",
+      "helperBinary": "release/end-user/macos-x64/native-helper/Klaxoon.NativeHelper",
+      "path": "release/end-user/macos-x64",
+      "signed": false,
+      "stripped": true,
+      "files": [
+        {
+          "path": "browser-extension/build-metadata.json",
+          "sha256": "79b36679066d363fd93f62ee65212342483dcb1407221d36fef218aab2483697",
+          "size": 97
+        },
+        {
+          "path": "browser-extension/dist/background/index.js",
+          "sha256": "3551b223233fa9a5f40f1971718aeae90263e720cae32934fb10085cfbf4d775",
+          "size": 92139
+        },
+        {
+          "path": "browser-extension/dist/content/exportAutomation.js",
+          "sha256": "fd166368a81415bc41670ec7badf0be6a718247eb18cc0f649cf94224255540f",
+          "size": 4128
+        },
+        {
+          "path": "browser-extension/dist/sidepanel/index.js",
+          "sha256": "9664d648f421cf84c02a65f6fd8ded202fb9ae912649bbc36f6ca5f288de808f",
+          "size": 168079
+        },
+        {
+          "path": "browser-extension/manifest.json",
+          "sha256": "8a0ef3cf36a50905fb297328ff157d87f0606cd4b948598e63c045f3b0e75449",
+          "size": 1004
+        },
+        {
+          "path": "browser-extension/sidepanel.html",
+          "sha256": "0355822d2f42000ecabb610b1fafa537058ece0247c97b8b96ff0103b94a5523",
+          "size": 316
+        },
+        {
+          "path": "install.sh",
+          "sha256": "572149d0fba1cbaad66e5a9fd5bad86db9e0a337f251723de5713830f8c4e4f3",
+          "size": 2282
+        },
+        {
+          "path": "manifest-template.json",
+          "sha256": "5a493bd2ddbd5de9d0c2adf15b3f9cf009524f997d526ae01dbcf284579c0670",
+          "size": 232
+        },
+        {
+          "path": "native-helper/Klaxoon.NativeHelper",
+          "sha256": "1d148f298975426d4aec7e1951d65083ab1a9cd06b90c66f2fcdff196003a4b7",
+          "size": 9325264
+        },
+        {
+          "path": "RELEASE.txt",
+          "sha256": "bc0ec2a38bb804783053abde986597b9e3eea995dd8f7a3d7c821c23c1dd4f49",
+          "size": 662
+        }
+      ]
+    }
+  ]
+}

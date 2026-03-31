@@ -1,0 +1,44 @@
+{
+  "version": "0.1.1",
+  "createdAt": "2026-03-31T20:17:34.696Z",
+  "hostPlatform": "darwin",
+  "hostArch": "arm64",
+  "installers": [
+    {
+      "bundleId": "windows-x64",
+      "platform": "windows",
+      "format": "zip",
+      "artifactPath": "/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/release/installers/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip",
+      "relativePath": "release/installers/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip",
+      "sha256": "ed0ec1cb03ed09d5d5f46f016f1e7d0b470f066bc30a3aba11dc65c1482d634e",
+      "size": 29791187
+    },
+    {
+      "bundleId": "linux-x64",
+      "platform": "linux",
+      "format": "deb",
+      "artifactPath": "/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/release/installers/klaxoon-bulk-export_0.1.1_linux-x64.deb",
+      "relativePath": "release/installers/klaxoon-bulk-export_0.1.1_linux-x64.deb",
+      "sha256": "c262622eecf2286c955a9d653238e3f71ec25e0064e7ec362460903db8d23324",
+      "size": 29376178
+    },
+    {
+      "bundleId": "macos-arm64",
+      "platform": "macos",
+      "format": "pkg",
+      "artifactPath": "/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/release/installers/KlaxoonBulkExport-0.1.1-macos-arm64.pkg",
+      "relativePath": "release/installers/KlaxoonBulkExport-0.1.1-macos-arm64.pkg",
+      "sha256": "db457bcabce6c6aa1cb476732adfb8a36d7ca0ef547eb4da9216a19e14bc848f",
+      "size": 3257959
+    },
+    {
+      "bundleId": "macos-x64",
+      "platform": "macos",
+      "format": "pkg",
+      "artifactPath": "/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/release/installers/KlaxoonBulkExport-0.1.1-macos-x64.pkg",
+      "relativePath": "release/installers/KlaxoonBulkExport-0.1.1-macos-x64.pkg",
+      "sha256": "c984577ede5c9dcb8e8b181baf3ed45241355971a63da856ef898b5e5333e631",
+      "size": 4729824
+    }
+  ]
+}

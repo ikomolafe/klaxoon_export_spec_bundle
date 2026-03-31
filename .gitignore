@@ -6,7 +6,9 @@ bin
 obj
 playwright-report
 test-results
-release
+release/*
+!release/assets/
+!release/assets/**
 .dev
 .DS_Store
 
