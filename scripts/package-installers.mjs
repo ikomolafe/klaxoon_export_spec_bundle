@@ -75,20 +75,19 @@ async function resetDirectory(directory) {
 function windowsLauncher() {
   return `@echo off
 setlocal
-set SCRIPT_DIR=%~dp0
+set "SCRIPT_DIR=%~dp0"
 echo Installing Klaxoon Bulk Export...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%install.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%install.ps1" %*
 set EXIT_CODE=%ERRORLEVEL%
 if not "%EXIT_CODE%"=="0" (
   echo.
   echo Installation failed with exit code %EXIT_CODE%.
-  pause
+  if not "%KD_SKIP_PAUSE%"=="1" pause
   exit /b %EXIT_CODE%
 )
 echo.
 echo Installation completed.
-echo Load the unpacked extension from the browser-extension folder shown by the installer.
-pause
+if not "%KD_SKIP_PAUSE%"=="1" pause
 `;
 }
 
@@ -104,8 +103,15 @@ Windows installer archive contents:
 Install steps:
 1. Extract this zip.
 2. Run Install.cmd.
-3. Load the unpacked extension folder reported by the installer in Chrome, Edge, Brave, or Chromium.
-4. Sign in to Klaxoon and start exporting PDFs.
+3. Open chrome://extensions for Chrome or Chromium, edge://extensions for Edge, or brave://extensions for Brave.
+4. Turn on Developer mode.
+5. Click Load unpacked and select %LOCALAPPDATA%\\KlaxoonBulkExport\\browser-extension.
+6. Sign in to Klaxoon, finish SSO, return to a https://*.klaxoon.com page, and start exporting PDFs.
+
+Notes:
+- Load the installed extension folder under %LOCALAPPDATA%, not the browser-extension folder inside the extracted zip.
+- The helper is self-contained for Windows x64. No separate .NET runtime installation is required.
+- The extension can only inspect https://*.klaxoon.com/* tabs, not the enterprise SSO provider page itself.
 `;
 }
 

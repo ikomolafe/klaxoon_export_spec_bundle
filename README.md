@@ -15,16 +15,16 @@ Repo download locations:
 - local source checkout builds: `release/installers/` and `release/assets/`
 
 Installer files:
-- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-installer.zip`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip)
-- Linux: [`klaxoon-bulk-export_0.1.1_linux-x64.deb`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/klaxoon-bulk-export_0.1.1_linux-x64.deb)
-- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64.pkg`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-arm64.pkg)
-- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64.pkg`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-x64.pkg)
+- Windows: `KlaxoonBulkExport-<version>-windows-x64-installer.zip`
+- Linux: `klaxoon-bulk-export_<version>_linux-x64.deb`
+- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64.pkg`
+- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64.pkg`
 
 Raw bundle files:
-- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip)
-- Linux: [`KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz)
-- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz)
-- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz)
+- Windows: `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`
+- Linux: `KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz`
+- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64-bundle.tar.gz`
+- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64-bundle.tar.gz`
 
 ## Fastest Path
 
@@ -34,12 +34,17 @@ For most users, use the installer for your OS.
 1. Download `KlaxoonBulkExport-<version>-windows-x64-installer.zip`.
 2. Extract it.
 3. Run `Install.cmd`.
-4. Open your Chromium browser's extensions page.
-5. Enable `Developer mode`.
+4. Open `chrome://extensions` for Chrome or Chromium, `edge://extensions` for Edge, or `brave://extensions` for Brave.
+5. Turn on the `Developer mode` toggle on that extensions page.
 6. Click `Load unpacked`.
 7. Select `%LOCALAPPDATA%\KlaxoonBulkExport\browser-extension`.
-8. Sign in to Klaxoon in that same browser profile.
-9. Open the extension side panel and export PDFs.
+8. Do not select the `browser-extension` folder from the extracted zip. Load the installed folder under `%LOCALAPPDATA%`.
+9. Sign in to Klaxoon in that same browser profile.
+10. After SSO finishes, return to a `https://*.klaxoon.com/` page such as `Recent` or an actual board tab.
+11. Open the extension side panel and export PDFs.
+
+Windows note:
+- The native helper shipped in the Windows x64 installer is self-contained. No separate .NET runtime installation is required on the target PC.
 
 ### Linux installer
 1. Download `klaxoon-bulk-export_<version>_linux-x64.deb`.
@@ -49,7 +54,8 @@ For most users, use the installer for your OS.
 5. Click `Load unpacked`.
 6. Select `~/.local/share/klaxoon-bulk-export/linux-x64/browser-extension`.
 7. Sign in to Klaxoon in that same browser profile.
-8. Open the extension side panel and export PDFs.
+8. After SSO finishes, return to a `https://*.klaxoon.com/` page such as `Recent` or an actual board tab.
+9. Open the extension side panel and export PDFs.
 
 ### macOS installer
 1. Download the `.pkg` that matches your Mac:
@@ -63,7 +69,8 @@ For most users, use the installer for your OS.
    - Apple Silicon: `~/Library/Application Support/KlaxoonBulkExport/macos-arm64/browser-extension`
    - Intel: `~/Library/Application Support/KlaxoonBulkExport/macos-x64/browser-extension`
 7. Sign in to Klaxoon in that same browser profile.
-8. Open the extension side panel and export PDFs.
+8. After SSO finishes, return to a `https://*.klaxoon.com/` page such as `Recent` or an actual board tab.
+9. Open the extension side panel and export PDFs.
 
 ## Raw Bundle Path
 
@@ -72,7 +79,7 @@ Use the raw bundle only if you want the lower-level install scripts.
 ### Windows raw bundle
 1. Download `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`.
 2. Extract it.
-3. Run `install.ps1`.
+3. Run `Install.cmd`. If you are automating the install, call `install.ps1` directly.
 4. Load the unpacked extension from the `browser-extension/` folder that the script installs.
 
 ### Linux raw bundle
@@ -105,7 +112,9 @@ The current product is PDF-first:
 - PDF export is the default path
 - zip packaging is available, but it is opt-in and off by default
 - when the user is not signed in, the side panel opens the normal Klaxoon page and waits for enterprise SSO to complete in the browser
-- export progress is owned by the background worker and shared across side panels and tabs for the lifetime of the browser session
+- the extension can only inspect `https://*.klaxoon.com/*` tabs, not the identity-provider page used during enterprise SSO
+- export progress is owned by the background worker, shared across side panels and tabs, and the last session state is kept across browser restarts
+- `Restart from beginning` starts a new run with the previous settings; it does not resume from the middle of a partially completed run
 
 For each board, the default PDF coverage strategy is:
 - `board-zones.pdf` when zone export is available

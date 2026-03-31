@@ -26,6 +26,11 @@ public sealed class NativeProtocol
         _paths = paths ?? new AppPaths();
     }
 
+    public void LogTransportFailure(string requestType, Exception exception)
+    {
+        ActivityLog.AppendException(_paths, $"Native helper request '{requestType}' failed.", exception);
+    }
+
     public object Handle(JsonObject request)
     {
         var type = request["type"]?.GetValue<string>() ?? string.Empty;
@@ -106,7 +111,8 @@ public sealed class NativeProtocol
         {
             var runRoot = ResolveRunRoot(request, runId);
             var logPath = Path.Combine(runRoot, "logs", "app.log");
-            File.AppendAllText(logPath, message + Environment.NewLine, Encoding.UTF8);
+            Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
+            File.AppendAllText(logPath, ActivityLog.FormatLine(message), Encoding.UTF8);
         }
 
         return new { ok = true, type = "logAppended" };
@@ -165,12 +171,16 @@ public sealed class NativeProtocol
 
     private string ResolveOutputRoot(JsonObject request)
     {
-        var outputRoot = request["outputRoot"]?.GetValue<string>();
+        return ResolveOutputRoot(request["outputRoot"]?.GetValue<string>(), _paths);
+    }
+
+    internal static string ResolveOutputRoot(string? outputRoot, AppPaths paths)
+    {
         var baseDirectory = string.IsNullOrWhiteSpace(outputRoot)
-            ? _paths.ExportsDirectory
+            ? paths.ExportsDirectory
             : outputRoot;
 
-        var normalizedBaseDirectory = baseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var normalizedBaseDirectory = Path.TrimEndingDirectorySeparator(Path.GetFullPath(baseDirectory));
         if (string.Equals(Path.GetFileName(normalizedBaseDirectory), ExportRootFolderName, StringComparison.Ordinal))
         {
             return normalizedBaseDirectory;

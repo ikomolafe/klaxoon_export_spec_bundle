@@ -14,5 +14,5 @@ public static class AppMetadata
 {
     public const string CompanyName = "KD Computers Ltd";
     public const string ProductName = "Klaxoon Bulk Export Utility";
-    public const string ProductVersion = "0.1.0";
+    public const string ProductVersion = "0.1.2";
 }

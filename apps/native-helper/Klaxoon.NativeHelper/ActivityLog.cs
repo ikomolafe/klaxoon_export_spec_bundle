@@ -14,11 +14,28 @@ namespace Klaxoon.NativeHelper;
 
 public static class ActivityLog
 {
+    private static readonly object SyncRoot = new();
+
     public static void Append(AppPaths paths, string message)
     {
         paths.EnsureDirectories();
-        var line = $"[{DateTimeOffset.UtcNow:O}] {message}{Environment.NewLine}";
-        File.AppendAllText(paths.HelperLogPath, line, Encoding.UTF8);
+        var line = FormatLine(message);
+
+        lock (SyncRoot)
+        {
+            File.AppendAllText(paths.HelperLogPath, line, Encoding.UTF8);
+        }
+    }
+
+    public static void AppendException(AppPaths paths, string context, Exception exception)
+    {
+        var indentedException = exception.ToString().Replace(Environment.NewLine, $"{Environment.NewLine}    ");
+        Append(paths, $"{context}{Environment.NewLine}    {indentedException}");
+    }
+
+    public static string FormatLine(string message)
+    {
+        return $"[{DateTimeOffset.UtcNow:O}] {message}{Environment.NewLine}";
     }
 
     public static string[] ReadRecentLines(AppPaths paths, int maxLines = 100)

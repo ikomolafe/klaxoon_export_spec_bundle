@@ -34,6 +34,7 @@ import {
 import { pingHelper, sendHelperMessage } from "../lib/helperClient";
 import { selectorRegistry, type SelectorSet } from "../lib/selectorRegistry";
 import { klaxoonEntryUrl, probeKlaxoonSession, type KlaxoonAuthStatus } from "../lib/session";
+import { isKlaxoonUrl, normalizeExtensionActionErrorMessage } from "../lib/tabAccess";
 import { runZoomMenuActionInPage } from "../lib/zoomMenuAutomation";
 
 type ManifestArtifactEntry = {
@@ -194,6 +195,7 @@ const exportFormatOrder: ExportFormat[] = ["pdf", "klx", "zip"];
 const recentBoardsUrl = "https://europa.klaxoon.com/userspace/recent";
 const activeExportSessionStorageKey = "klaxoon-active-export-session";
 const authSessionStorageKey = "klaxoon-auth-session";
+const exportSessionStorageArea = chrome.storage.local;
 const authStatusValues: KlaxoonAuthStatus[] = [
   "checking",
   "login_required",
@@ -239,6 +241,10 @@ const runtimeExportConfig: Record<
 
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  void handleBrowserStartup();
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
@@ -441,10 +447,13 @@ async function respondWithAction(
   try {
     sendResponse(await action());
   } catch (error) {
-    await logHelperMessage(error instanceof Error ? error.message : "UNKNOWN_HELPER_ERROR");
+    const rawMessage = error instanceof Error ? error.message : "UNKNOWN_HELPER_ERROR";
+    const activeTabUrl = (await getActiveWindowTab().catch(() => undefined))?.url;
+    const message = normalizeExtensionActionErrorMessage(rawMessage, activeTabUrl);
+    await logHelperMessage(message === rawMessage ? rawMessage : `${message} | raw=${rawMessage}`);
     sendResponse({
       ok: false,
-      message: error instanceof Error ? error.message : "UNKNOWN_HELPER_ERROR"
+      message
     });
   }
 }
@@ -646,6 +655,30 @@ async function handleAuthTabRemoved(tabId: number) {
     tabUrl: undefined,
     updatedAt: new Date().toISOString()
   });
+}
+
+async function handleBrowserStartup() {
+  const exportSession = await loadExportSession();
+  if (exportSession && !isTerminalExportSessionPhase(exportSession.phase)) {
+    await saveExportSession({
+      ...exportSession,
+      phase: "stopped",
+      message: "The previous browser session ended before the export completed. Use Restart from beginning to start a new run.",
+      updatedAt: new Date().toISOString()
+    });
+  }
+
+  const authSession = await loadAuthSession();
+  if (authSession?.status === "login_in_progress") {
+    await saveAuthSession({
+      ...authSession,
+      status: "login_failed",
+      message: "Browser restart interrupted the sign-in flow. Open Klaxoon sign-in again if needed.",
+      tabId: undefined,
+      tabUrl: undefined,
+      updatedAt: new Date().toISOString()
+    });
+  }
 }
 
 async function exportCurrentBoard(
@@ -1084,12 +1117,8 @@ function mapExportSessionToActionResponse(session: ExportSessionState): Extensio
   };
 }
 
-function isKlaxoonUrl(url: string | undefined): boolean {
-  return typeof url === "string" && /^https:\/\/[^/]*klaxoon\.com\//i.test(url);
-}
-
 async function loadExportSession(): Promise<ExportSessionState | null> {
-  const stored = await chrome.storage.session.get([activeExportSessionStorageKey]);
+  const stored = await exportSessionStorageArea.get([activeExportSessionStorageKey]);
   const candidate = stored[activeExportSessionStorageKey];
   if (!candidate || typeof candidate !== "object") {
     return null;
@@ -1134,7 +1163,7 @@ async function loadActiveExportSession() {
 }
 
 async function saveExportSession(session: ExportSessionState) {
-  await chrome.storage.session.set({
+  await exportSessionStorageArea.set({
     [activeExportSessionStorageKey]: session
   });
 

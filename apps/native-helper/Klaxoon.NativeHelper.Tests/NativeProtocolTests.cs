@@ -218,4 +218,17 @@ public sealed class NativeProtocolTests
         Assert.StartsWith(Path.Combine(outputRoot, "packages"), archivePath, StringComparison.Ordinal);
         Assert.DoesNotContain("Klaxoon_Bulk_Export/Klaxoon_Bulk_Export", archivePath, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void ResolveOutputRootPreservesFilesystemRootOutputBase()
+    {
+        var root = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        var paths = new AppPaths(root);
+        var filesystemRoot = Path.GetPathRoot(Path.GetTempPath())!;
+
+        Assert.Equal(
+            Path.Combine(filesystemRoot, "Klaxoon_Bulk_Export"),
+            NativeProtocol.ResolveOutputRoot(filesystemRoot, paths)
+        );
+    }
 }

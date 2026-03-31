@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Klaxoon Bulk Export",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Bulk export Klaxoon boards.",
   "permissions": [
     "debugger",

@@ -30,14 +30,17 @@ Installed extension locations:
 - macOS Intel: `~/Library/Application Support/KlaxoonBulkExport/macos-x64/browser-extension`
 
 After install, load that `browser-extension` folder in Chrome, Edge, Brave, or Chromium.
+On Windows, do not load the `browser-extension` folder from the extracted installer zip after the installer has copied the product into `%LOCALAPPDATA%`.
 
 Recommended user flow in the browser:
-1. Open `chrome://extensions`, `edge://extensions`, `brave://extensions`, or `chrome://extensions` for Chromium.
+1. Open `chrome://extensions` for Chrome or Chromium, `edge://extensions` for Edge, or `brave://extensions` for Brave.
 2. Enable `Developer mode`.
 3. Click `Load unpacked`.
 4. Select the installed `browser-extension` folder for your OS.
-5. Sign in to Klaxoon in that same browser profile.
-6. Open the side panel and export PDFs.
+5. On Windows, select `%LOCALAPPDATA%\\KlaxoonBulkExport\\browser-extension`.
+6. Sign in to Klaxoon in that same browser profile.
+7. After SSO finishes, return to a `https://*.klaxoon.com/` page such as `Recent` or an actual board tab.
+8. Open the side panel and export PDFs.
 
 ## Local development
 1. Run `npm install` at the repository root.
@@ -51,7 +54,8 @@ Recommended user flow in the browser:
 3. Optionally choose an output folder, or leave it blank to use the helper default location.
 4. If the folder picker is unavailable, especially on Linux without `zenity` or `kdialog`, type a local folder path manually in the side panel instead.
 5. Optionally enable final zip packaging.
-6. Export the current board PDF or all participated-board PDFs.
+6. Start exports from a `https://*.klaxoon.com/` page. The extension cannot read the enterprise SSO provider page itself.
+7. Export the current board PDF or all participated-board PDFs.
 
 The side panel only exposes PDF export today. Zone-aware boards prefer the zone export flow first; if that is unavailable, the exporter falls back to the board-level PDF path.
 
@@ -135,6 +139,9 @@ The helper host must be registered under the current user before the extension c
    - `HKCU\Software\Chromium\NativeMessagingHosts\com.company.klaxoon_export`
 4. Set each registry default value to the full manifest file path.
 5. Load the unpacked extension from `apps/edge-extension/build/extension`.
+
+Windows installer note:
+- The shipped Windows x64 helper is published as a self-contained single-file executable. End users should not need to install a separate .NET runtime.
 
 ## Common failure modes
 - `Specified native messaging host not found.`: the manifest file is missing or in the wrong directory.

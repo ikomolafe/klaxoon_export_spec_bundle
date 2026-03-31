@@ -1,4 +1,5 @@
 import type { ReadinessResponse } from "@klaxoon/shared";
+import { isKlaxoonUrl } from "./tabAccess";
 
 export type KlaxoonAuthStatus = NonNullable<ReadinessResponse["authStatus"]>;
 
@@ -66,7 +67,7 @@ export async function probeKlaxoonSession(
       pendingProbe = {
         signedIn: false,
         authStatus: "login_in_progress",
-        authMessage: "Continue the enterprise SSO flow in the opened browser tab.",
+        authMessage: "Continue the enterprise SSO flow in the opened browser tab. The extension will reconnect once the tab returns to a klaxoon.com page.",
         authTabId: preferredTab.id,
         tabUrl: preferredTab.url,
         detail: `preferred-tab-non-klaxoon:${preferredTab.url ?? "unknown"}`
@@ -100,7 +101,7 @@ export async function probeKlaxoonSession(
   return {
     signedIn: false,
     authStatus: "login_required",
-    authMessage: "Open Klaxoon sign-in to continue through the normal enterprise SSO page.",
+    authMessage: "Open Klaxoon sign-in to continue. The extension only reads https://*.klaxoon.com/* pages, not the enterprise SSO provider page.",
     detail: "no-authenticated-klaxoon-tabs-found"
   };
 }
@@ -198,8 +199,4 @@ async function probeKlaxoonTab(scriptingApi: typeof chrome.scripting, tabId: num
       detail: error instanceof Error ? error.message : String(error)
     };
   }
-}
-
-function isKlaxoonUrl(url: string | undefined): boolean {
-  return typeof url === "string" && /^https:\/\/[^/]*klaxoon\.com\//i.test(url);
 }

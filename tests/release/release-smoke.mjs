@@ -17,11 +17,24 @@ import { fileURLToPath } from "node:url";
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const releaseDir = path.join(rootDir, "release", "end-user");
 const manifestPath = path.join(releaseDir, "release-manifest.json");
+const packageJson = JSON.parse(await fs.readFile(path.join(rootDir, "package.json"), "utf8"));
+const extensionPackageJson = JSON.parse(
+  await fs.readFile(path.join(rootDir, "apps", "edge-extension", "package.json"), "utf8")
+);
+const sourceExtensionManifest = JSON.parse(
+  await fs.readFile(path.join(rootDir, "apps", "edge-extension", "public", "manifest.json"), "utf8")
+);
 
 const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
 
 assert.equal(Array.isArray(manifest.bundles), true, "release manifest must contain bundles");
 assert.equal(manifest.bundles.length >= 3, true, "release manifest must list cross-platform bundles");
+assert.equal(extensionPackageJson.version, packageJson.version, "extension package version must match the root package version");
+assert.equal(
+  sourceExtensionManifest.version,
+  extensionPackageJson.version,
+  "source extension manifest version must match apps/edge-extension/package.json"
+);
 
 function assertWindowsInstaller(bundle, installerContents) {
   assert.equal(
@@ -34,20 +47,35 @@ function assertWindowsInstaller(bundle, installerContents) {
     false,
     `bundle ${bundle.bundleId} must not write registry default values with Set-ItemProperty`
   );
+  assert.equal(
+    installerContents.includes("HKCU\\\\Software"),
+    false,
+    `bundle ${bundle.bundleId} must not escape Windows registry key separators twice`
+  );
 }
 
 for (const bundle of manifest.bundles) {
   const bundleDir = path.join(rootDir, bundle.path);
   const checksumPath = path.join(bundleDir, "SHA256SUMS.txt");
   const manifestTemplatePath = path.join(bundleDir, "manifest-template.json");
+  const bundledExtensionManifestPath = path.join(bundleDir, "browser-extension", "manifest.json");
 
   await fs.access(bundleDir);
   await fs.access(checksumPath);
   await fs.access(manifestTemplatePath);
-  await fs.access(path.join(bundleDir, "browser-extension", "manifest.json"));
+  await fs.access(bundledExtensionManifestPath);
+
+  const bundledExtensionManifest = JSON.parse(await fs.readFile(bundledExtensionManifestPath, "utf8"));
+  assert.equal(
+    bundledExtensionManifest.version,
+    extensionPackageJson.version,
+    `bundle ${bundle.bundleId} must ship an extension manifest version matching apps/edge-extension/package.json`
+  );
 
   if (bundle.bundleId.startsWith("windows-")) {
     const installerPath = path.join(bundleDir, "install.ps1");
+    const launcherPath = path.join(bundleDir, "Install.cmd");
+    await fs.access(launcherPath);
     await fs.access(installerPath);
     assertWindowsInstaller(bundle, await fs.readFile(installerPath, "utf8"));
   }

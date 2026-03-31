@@ -61,6 +61,20 @@ async function ensureExists(targetPath) {
   await fs.access(targetPath);
 }
 
+function runHelperPing(helperPath) {
+  const result = spawnSync(helperPath, ["--line-mode"], {
+    encoding: "utf8",
+    input: '{"type":"ping"}\n'
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  assert.equal(result.status, 0, `helper ${helperPath} failed to start: ${(result.stderr || result.stdout || "").trim()}`);
+  assert.equal(result.stdout.includes('"type":"pong"') || result.stdout.includes('"type": "pong"'), true, `helper ${helperPath} did not answer ping`);
+}
+
 function manifestAssertions(manifest, helperPath) {
   assert.equal(manifest.name, nativeHostName);
   assert.equal(manifest.type, "stdio");
@@ -86,6 +100,7 @@ async function verifyUnixInstall(bundleDir) {
 
   await ensureExists(path.join(extensionDir, "manifest.json"));
   await ensureExists(helperPath);
+  runHelperPing(helperPath);
 
   for (const browser of supportedChromiumBrowsers) {
     const manifestPath = path.join(nativeHostRoot, browser.id, `${nativeHostName}.json`);
@@ -100,24 +115,40 @@ async function verifyWindowsInstall(bundleDir) {
   const manifestRoot = path.join(os.tmpdir(), `KlaxoonBulkExportManifest-${process.pid}-${Date.now()}`);
   cleanupTargets.push(installRoot, manifestRoot);
 
-  const installArgs = [
-    "-NoProfile",
-    "-ExecutionPolicy",
-    "Bypass",
-    "-File",
-    path.join(bundleDir, "install.ps1"),
-    "-InstallRoot",
-    installRoot,
-    "-ManifestRoot",
-    manifestRoot
-  ];
-
   const shouldRegisterNativeHosts = process.env.CI === "true";
-  if (!shouldRegisterNativeHosts) {
-    installArgs.push("-SkipNativeHostRegistration");
+  const launcherPath = path.join(bundleDir, "Install.cmd");
+  const launcherExists = await fs.access(launcherPath).then(() => true).catch(() => false);
+  if (launcherExists) {
+    const installArgs = [
+      "/d",
+      "/c",
+      launcherPath,
+      "-InstallRoot",
+      installRoot,
+      "-ManifestRoot",
+      manifestRoot
+    ];
+    if (!shouldRegisterNativeHosts) {
+      installArgs.push("-SkipNativeHostRegistration");
+    }
+    runOrThrow("cmd.exe", installArgs, { env: { KD_SKIP_PAUSE: "1" } });
+  } else {
+    const installArgs = [
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      path.join(bundleDir, "install.ps1"),
+      "-InstallRoot",
+      installRoot,
+      "-ManifestRoot",
+      manifestRoot
+    ];
+    if (!shouldRegisterNativeHosts) {
+      installArgs.push("-SkipNativeHostRegistration");
+    }
+    runOrThrow("powershell", installArgs);
   }
-
-  runOrThrow("powershell", installArgs);
 
   const extensionDir = path.join(installRoot, "browser-extension");
   const helperPath = path.join(installRoot, "native-helper", "Klaxoon.NativeHelper.exe");
@@ -126,6 +157,7 @@ async function verifyWindowsInstall(bundleDir) {
   await ensureExists(path.join(extensionDir, "manifest.json"));
   await ensureExists(helperPath);
   await ensureExists(manifestPath);
+  runHelperPing(helperPath);
 
   const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
   manifestAssertions(manifest, helperPath);

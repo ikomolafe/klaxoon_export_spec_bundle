@@ -12,6 +12,7 @@ release/.stage/**
 !release/assets/
 !release/assets/**
 .dev
+.dotnet
 .DS_Store
 
 # Private or strategy-only docs

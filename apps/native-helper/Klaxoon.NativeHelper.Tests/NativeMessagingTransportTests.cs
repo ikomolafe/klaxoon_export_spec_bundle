@@ -66,6 +66,25 @@ public sealed class NativeMessagingTransportTests
         Assert.Contains("pong", output.ToString(), StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task RunLineModeAsyncLogsProtocolFailures()
+    {
+        var root = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        var protocol = CreateProtocol(root);
+
+        using var input = new StringReader("""{"type":"prepareRun"}""" + Environment.NewLine);
+        await using var output = new StringWriter();
+
+        await NativeMessagingTransport.RunLineModeAsync(protocol, input, output);
+
+        var response = output.ToString();
+        Assert.Contains("HELPER_EXCEPTION", response, StringComparison.Ordinal);
+
+        var lines = ActivityLog.ReadRecentLines(new AppPaths(root));
+        Assert.Contains(lines, line => line.Contains("prepareRun", StringComparison.Ordinal));
+        Assert.Contains(lines, line => line.Contains("failed", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static MemoryStream CreateInputStream(string json)
     {
         var payload = Encoding.UTF8.GetBytes(json);

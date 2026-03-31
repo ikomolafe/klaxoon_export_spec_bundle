@@ -17,7 +17,7 @@
    - Windows: `%LOCALAPPDATA%\\KD Computers Ltd\\Klaxoon Bulk Export Utility\\logs\\helper.log`
    - Linux: `~/.local/share/KD Computers Ltd/Klaxoon Bulk Export Utility/logs/helper.log`
 5. If a learned export recipe was discarded, rerun the export once so the extension can capture and relearn the current request chain.
-6. Use `Restart` from the side panel session card instead of opening a second export from another tab.
+6. Use `Restart from beginning` from the side panel session card instead of opening a second export from another tab.
 7. On Linux, if `Choose folder` fails with `FOLDER_PICKER_UNAVAILABLE`, continue by typing a local path manually; export does not depend on the picker once the path is known.
 
 ## Release bundle support notes

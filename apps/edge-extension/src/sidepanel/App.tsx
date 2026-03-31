@@ -78,7 +78,7 @@ const defaultReadinessState: ReadinessResponse = {
   helperConnected: false,
   signedIn: false,
   authStatus: "login_required",
-  authMessage: "Open Klaxoon sign-in to continue through the normal enterprise SSO page."
+  authMessage: "Open Klaxoon sign-in to continue. The extension only reads https://*.klaxoon.com/* pages, not the enterprise SSO provider page."
 };
 
 const panelStyles = `
@@ -613,9 +613,9 @@ export function App() {
           ? "Pausing after the current board completes."
           : action === "resume_export"
             ? "Resuming the current export."
-            : action === "stop_export"
-              ? "Stopping after the current board completes."
-              : "Restarting the last export run."
+              : action === "stop_export"
+                ? "Stopping after the current board completes."
+              : "Restarting the last export run from the beginning."
       },
       async () => {
         const response = await sendMessage<ExtensionActionResponse>({ type: action });
@@ -695,7 +695,7 @@ export function App() {
       setBusy(true);
       setActiveOperation({
         title: "Opening Klaxoon sign-in",
-        summary: "Opening the normal Klaxoon page and handing off to the enterprise SSO flow."
+        summary: "Opening the normal Klaxoon page and handing off to the enterprise SSO flow. The extension will wait until the tab returns to klaxoon.com."
       });
       setNotice(null);
 
@@ -749,7 +749,7 @@ export function App() {
   const canStopExport = exportSession?.scope === "participated" && (exportSession.phase === "discovering" || exportSession.phase === "running" || exportSession.phase === "paused");
   const canRestartExport = exportSession !== null && !hasActiveSession;
   const authSummary = formatAuthSummary(state);
-  const authDetail = state.authMessage ?? "Open Klaxoon sign-in to continue through the normal enterprise SSO page.";
+  const authDetail = state.authMessage ?? "Open Klaxoon sign-in to continue. The extension only reads https://*.klaxoon.com/* pages, not the enterprise SSO provider page.";
   const canStartLogin = !busy && !state.signedIn;
 
   return (
@@ -947,7 +947,7 @@ export function App() {
                 onClick={() => void controlExport("restart_export")}
                 disabled={!canRestartExport}
               >
-                Restart
+                Restart from beginning
               </button>
             </div>
           </section>
@@ -1062,7 +1062,7 @@ export function App() {
                     onClick={() => void controlExport("restart_export")}
                     disabled={!canRestartExport}
                   >
-                    Restart
+                    Restart from beginning
                   </button>
                 </div>
               ) : null}

@@ -82,13 +82,16 @@ public static class NativeMessagingTransport
 
     private static object HandleMessage(NativeProtocol protocol, string rawRequest)
     {
+        var requestType = "unknown";
         try
         {
             var request = JsonNode.Parse(rawRequest)?.AsObject() ?? throw new InvalidOperationException("INVALID_JSON");
+            requestType = request["type"]?.GetValue<string>() ?? "unknown";
             return protocol.Handle(request);
         }
         catch (Exception ex)
         {
+            protocol.LogTransportFailure(requestType, ex);
             return new { ok = false, errorCode = "HELPER_EXCEPTION", message = ex.Message };
         }
     }

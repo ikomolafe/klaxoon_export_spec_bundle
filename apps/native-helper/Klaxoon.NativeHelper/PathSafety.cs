@@ -37,12 +37,15 @@ public static class PathSafety
 
     public static string EnsureUnderRoot(string root, string relativePath)
     {
+        var fullRoot = Path.GetFullPath(root);
         var normalizedRelativePath = relativePath
             .Replace('\\', Path.DirectorySeparatorChar)
             .Replace('/', Path.DirectorySeparatorChar);
-        var fullPath = Path.GetFullPath(Path.Combine(root, normalizedRelativePath));
-        var fullRoot = Path.GetFullPath(root);
-        if (!fullPath.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase))
+        var fullPath = Path.GetFullPath(Path.Combine(fullRoot, normalizedRelativePath));
+        var relativeToRoot = Path.GetRelativePath(fullRoot, fullPath);
+        if (relativeToRoot == ".."
+            || relativeToRoot.StartsWith($"..{Path.DirectorySeparatorChar}", StringComparison.Ordinal)
+            || Path.IsPathRooted(relativeToRoot))
         {
             throw new InvalidOperationException("PATH_TRAVERSAL_BLOCKED");
         }

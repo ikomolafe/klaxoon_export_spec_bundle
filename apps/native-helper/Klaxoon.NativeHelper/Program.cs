@@ -13,18 +13,51 @@ namespace Klaxoon.NativeHelper;
 
 public static class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         Console.InputEncoding = Encoding.UTF8;
         Console.OutputEncoding = Encoding.UTF8;
 
-        var protocol = new NativeProtocol();
-        if (args.Contains("--line-mode", StringComparer.Ordinal))
-        {
-            await NativeMessagingTransport.RunLineModeAsync(protocol, Console.In, Console.Out);
-            return;
-        }
+        var paths = new AppPaths();
+        RegisterGlobalExceptionLogging(paths);
 
-        await NativeMessagingTransport.RunAsync(protocol, Console.OpenStandardInput(), Console.OpenStandardOutput());
+        try
+        {
+            var protocol = new NativeProtocol(paths);
+            if (args.Contains("--line-mode", StringComparer.Ordinal))
+            {
+                await NativeMessagingTransport.RunLineModeAsync(protocol, Console.In, Console.Out);
+                return 0;
+            }
+
+            await NativeMessagingTransport.RunAsync(protocol, Console.OpenStandardInput(), Console.OpenStandardOutput());
+            return 0;
+        }
+        catch (Exception exception)
+        {
+            ActivityLog.AppendException(paths, "Native helper terminated with an unhandled fatal error.", exception);
+            Console.Error.WriteLine(exception);
+            return 1;
+        }
+    }
+
+    private static void RegisterGlobalExceptionLogging(AppPaths paths)
+    {
+        AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
+        {
+            if (eventArgs.ExceptionObject is Exception exception)
+            {
+                ActivityLog.AppendException(paths, "Unhandled AppDomain exception.", exception);
+                return;
+            }
+
+            ActivityLog.Append(paths, $"Unhandled non-exception AppDomain failure: {eventArgs.ExceptionObject}");
+        };
+
+        TaskScheduler.UnobservedTaskException += (_, eventArgs) =>
+        {
+            ActivityLog.AppendException(paths, "Unobserved task exception.", eventArgs.Exception);
+            eventArgs.SetObserved();
+        };
     }
 }

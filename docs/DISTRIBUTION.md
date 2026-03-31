@@ -43,6 +43,7 @@ release/
     windows-x64/
       browser-extension/
       native-helper/
+      Install.cmd
       install.ps1
       manifest-template.json
       SHA256SUMS.txt
@@ -126,7 +127,7 @@ These overrides are used by the release install smoke test so CI can validate in
 The installers embed the helper and extension payloads. The browser extension still needs to be loaded from the installed `browser-extension/` directory because store/policy distribution is not yet part of the release pipeline.
 
 ## GitHub release download path
-- Push a tag such as `v0.1.0`.
+- Push a tag such as `v<version>`.
 - `.github/workflows/github-release.yml` builds, validates, packages, and uploads the contents of `release/assets/` to the GitHub Releases page for that tag.
 - End users should prefer the installer assets from that release page.
 - Advanced users can download the raw bundle archives from the same release if they want the lower-level install scripts.

@@ -9,8 +9,13 @@ Governing law: England and Wales.
 */
 
 import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const knownDotnet8Paths = [
+  path.join(rootDir, ".dotnet", "dotnet"),
   "/opt/homebrew/opt/dotnet@8/bin/dotnet",
   "/usr/local/share/dotnet/dotnet",
   "/usr/bin/dotnet"
@@ -27,6 +32,14 @@ export function resolveDotnetCommand() {
 
 export function createDotnetEnvironment() {
   const command = resolveDotnetCommand();
+
+  if (command === path.join(rootDir, ".dotnet", "dotnet")) {
+    return {
+      ...process.env,
+      PATH: `${path.join(rootDir, ".dotnet")}:${process.env.PATH ?? ""}`,
+      DOTNET_ROOT: path.join(rootDir, ".dotnet")
+    };
+  }
 
   if (command === "/opt/homebrew/opt/dotnet@8/bin/dotnet") {
     return {

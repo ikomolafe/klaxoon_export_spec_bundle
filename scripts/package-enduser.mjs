@@ -151,9 +151,28 @@ function createManifestTemplate() {
   ) + "\n";
 }
 
+function windowsLauncher() {
+  return `@echo off
+setlocal
+set "SCRIPT_DIR=%~dp0"
+echo Installing Klaxoon Bulk Export...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%install.ps1" %*
+set EXIT_CODE=%ERRORLEVEL%
+if not "%EXIT_CODE%"=="0" (
+  echo.
+  echo Installation failed with exit code %EXIT_CODE%.
+  if not "%KD_SKIP_PAUSE%"=="1" pause
+  exit /b %EXIT_CODE%
+)
+echo.
+echo Installation completed.
+if not "%KD_SKIP_PAUSE%"=="1" pause
+`;
+}
+
 function windowsInstaller() {
   const registryKeys = windowsNativeMessagingRegistryKeys(nativeHostName);
-  const registryList = registryKeys.map(({ registryKey }) => `"${registryKey.replaceAll("\\", "\\\\")}"`).join(",\n  ");
+  const registryList = registryKeys.map(({ registryKey }) => `"${registryKey}"`).join(",\n  ");
 
   return `param(
   [string]$InstallRoot = "$env:LOCALAPPDATA\\KlaxoonBulkExport",
@@ -201,7 +220,13 @@ if (-not $SkipNativeHostRegistration) {
 }
 
 Write-Host "Installed helper and native messaging host."
-Write-Host "Load the unpacked extension from: $ExtensionTarget"
+Write-Host "Installed helper path: $HelperExe"
+Write-Host "Native host manifest path: $ManifestTarget"
+Write-Host "Installed extension path: $ExtensionTarget"
+Write-Host "Do not load the browser-extension folder from the extracted zip."
+Write-Host "Open chrome://extensions, edge://extensions, or brave://extensions."
+Write-Host "Turn on Developer mode, click Load unpacked, and select: $ExtensionTarget"
+Write-Host "After SSO finishes, return to a https://*.klaxoon.com page before starting exports."
 Write-Host "Supported browsers: ${supportedBrowserSummary()}"
 Write-Host "Deterministic extension ID: ${extensionId}"
 `;
@@ -309,17 +334,11 @@ function signingHookForTarget(target) {
 }
 
 async function tryStripBinary(target, helperBinaryPath) {
-  const hostCanStrip =
-    (process.platform === "darwin" && target.platform === "macos") ||
-    (process.platform === "linux" && target.platform === "linux");
-
-  if (!hostCanStrip || process.env.KD_SKIP_STRIP === "1") {
-    return false;
-  }
-
-  const args = process.platform === "darwin" ? ["-x", helperBinaryPath] : ["--strip-unneeded", helperBinaryPath];
-  const result = spawnSync("strip", args, { stdio: "ignore" });
-  return result.status === 0;
+  // The helper is published as a single-file self-contained bundle. Stripping that
+  // post-publish can corrupt the host bundle format, which then fails at startup.
+  void target;
+  void helperBinaryPath;
+  return false;
 }
 
 runOrThrow("npm", ["run", "build"]);
@@ -364,6 +383,7 @@ for (const target of releaseTargets) {
   await fs.writeFile(path.join(bundleDir, "manifest-template.json"), createManifestTemplate(), "utf8");
 
   if (target.platform === "windows") {
+    await fs.writeFile(path.join(bundleDir, "Install.cmd"), windowsLauncher(), "utf8");
     await fs.writeFile(path.join(bundleDir, "install.ps1"), windowsInstaller(), "utf8");
   } else {
     const installPath = path.join(bundleDir, "install.sh");

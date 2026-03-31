@@ -18,6 +18,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const extensionDir = path.join(rootDir, "apps", "edge-extension");
 const publicDir = path.join(extensionDir, "public");
 const outDir = path.join(extensionDir, "build", "extension");
+const extensionPackageJson = JSON.parse(await fs.readFile(path.join(extensionDir, "package.json"), "utf8"));
 
 async function ensureCleanDirectory(targetDir) {
   await fs.rm(targetDir, { recursive: true, force: true });
@@ -33,6 +34,7 @@ async function copyPublicAssets() {
 
     if (entry === "manifest.json") {
       const manifest = JSON.parse(await fs.readFile(source, "utf8"));
+      manifest.version = extensionPackageJson.version;
       manifest.key = extensionPublicKey;
       await fs.writeFile(destination, JSON.stringify(manifest, null, 2) + "\n", "utf8");
       continue;
@@ -72,7 +74,8 @@ async function bundleEntries() {
 
   const metadata = {
     builtAt: new Date().toISOString(),
-    extensionId
+    extensionId,
+    version: extensionPackageJson.version
   };
   await fs.writeFile(path.join(outDir, "build-metadata.json"), JSON.stringify(metadata, null, 2) + "\n", "utf8");
 }

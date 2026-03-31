@@ -23,4 +23,16 @@ public sealed class PathSafetyTests
 
         Assert.Throws<InvalidOperationException>(() => PathSafety.EnsureUnderRoot(root, "..\\escape.txt"));
     }
+
+    [Fact]
+    public void EnsureUnderRootRejectsSiblingPrefixEscape()
+    {
+        var parent = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        var root = Path.Combine(parent, "root");
+        Directory.CreateDirectory(root);
+
+        var siblingPath = Path.Combine(parent, "root-elsewhere", "escape.txt");
+
+        Assert.Throws<InvalidOperationException>(() => PathSafety.EnsureUnderRoot(root, siblingPath));
+    }
 }
