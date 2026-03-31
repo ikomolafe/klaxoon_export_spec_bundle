@@ -1,0 +1,26 @@
+node_modules
+dist
+build
+coverage
+bin
+obj
+playwright-report
+test-results
+release
+.dev
+.DS_Store
+
+# Private or strategy-only docs
+/AGENTS.md
+/handoff.md
+/HANDOFF.md
+/docs/BRD.md
+/docs/PRD.md
+/docs/IMPLEMENTATION_PLAN.md
+/docs/KNOWN_LIMITATIONS.md
+/docs/SECURITY_MODEL.md
+/docs/*strategy*.md
+
+# Prompt / agent artifacts
+*.prompt.md
+*.agent.md

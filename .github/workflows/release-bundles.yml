@@ -1,0 +1,45 @@
+name: release-bundles
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            label: linux-x64
+          - os: windows-latest
+            label: windows-x64
+          - os: macos-13
+            label: macos-x64
+          - os: macos-14
+            label: macos-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: npm ci
+      - if: runner.os == 'Linux'
+        run: npx playwright install --with-deps chromium
+      - if: runner.os != 'Linux'
+        run: npx playwright install chromium
+      - run: npm test
+      - run: npm run test:helper
+      - run: npm run package:enduser
+      - run: npm run test:release
+      - run: npm run test:release-install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: klaxoon-end-user-bundles-${{ matrix.label }}
+          path: release/end-user

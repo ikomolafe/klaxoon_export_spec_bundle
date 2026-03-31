@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Klaxoon Bulk Export",
+  "version": "0.1.0",
+  "description": "Bulk export Klaxoon boards.",
+  "permissions": [
+    "debugger",
+    "downloads",
+    "nativeMessaging",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs"
+  ],
+  "optional_permissions": [
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://*.klaxoon.com/*"
+  ],
+  "background": {
+    "service_worker": "dist/background/index.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Klaxoon Bulk Export"
+  }
+}

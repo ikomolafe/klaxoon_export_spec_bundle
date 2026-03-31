@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "run-20260312-143000",
+  "startedAt": "2026-03-12T14:30:00Z",
+  "outputRoot": "C:\\Exports\\Klaxoon_Bulk_Export",
+  "boards": [
+    {
+      "workspaceName": "Delivery",
+      "boardName": "Quarterly Planning",
+      "boardKey": "board-12345",
+      "statuses": {
+        "pdf": "done",
+        "klx": "skipped",
+        "zip": "done"
+      },
+      "files": [
+        "workspaces/delivery/quarterly-planning__board-12345/board.zip"
+      ],
+      "zones": [
+        {
+          "zoneName": "Overview",
+          "zoneKey": "zone-001",
+          "statuses": {
+            "pdf": "done"
+          },
+          "files": [
+            "workspaces/delivery/quarterly-planning__board-12345/zones/00-overview/board.pdf"
+          ]
+        },
+        {
+          "zoneName": "Decisions",
+          "zoneKey": "zone-002",
+          "statuses": {
+            "pdf": "done"
+          },
+          "files": [
+            "workspaces/delivery/quarterly-planning__board-12345/zones/01-decisions/board.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "workspaceName": "Delivery",
+      "boardName": "Architecture Review",
+      "boardKey": "board-67890",
+      "statuses": {
+        "pdf": "skipped",
+        "klx": "done",
+        "zip": "done"
+      },
+      "files": [
+        "workspaces/delivery/architecture-review__board-67890/board.klx",
+        "workspaces/delivery/architecture-review__board-67890/board.zip"
+      ]
+    }
+  ]
+}

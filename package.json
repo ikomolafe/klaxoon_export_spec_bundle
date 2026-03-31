@@ -1,0 +1,24 @@
+{
+  "name": "klaxoon-bulk-export",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/edge-extension",
+    "packages/shared",
+    "tests/e2e"
+  ],
+  "scripts": {
+    "build": "npm run build -w @klaxoon/shared && npm run build -w @klaxoon/edge-extension",
+    "build:helper": "node scripts/run-dotnet-command.mjs build apps/native-helper/Klaxoon.NativeHelper/Klaxoon.NativeHelper.csproj",
+    "dev:register-host": "node scripts/register-dev-host.mjs",
+    "package:enduser": "node scripts/package-enduser.mjs",
+    "test": "npm run test -w @klaxoon/shared && npm run test -w @klaxoon/edge-extension && npm run test -w @klaxoon/e2e",
+    "test:helper": "node scripts/run-dotnet-command.mjs test apps/native-helper/Klaxoon.NativeHelper.Tests/Klaxoon.NativeHelper.Tests.csproj",
+    "test:release": "node tests/release/release-smoke.mjs",
+    "test:release-install": "node tests/release/install-smoke.mjs",
+    "lint": "npm run lint -w @klaxoon/shared && npm run lint -w @klaxoon/edge-extension"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.1"
+  }
+}
