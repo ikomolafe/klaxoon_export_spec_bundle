@@ -23,6 +23,19 @@ const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
 assert.equal(Array.isArray(manifest.bundles), true, "release manifest must contain bundles");
 assert.equal(manifest.bundles.length >= 3, true, "release manifest must list cross-platform bundles");
 
+function assertWindowsInstaller(bundle, installerContents) {
+  assert.equal(
+    installerContents.includes("& reg.exe add $RegPath /ve /t REG_SZ /d $ManifestTarget /f"),
+    true,
+    `bundle ${bundle.bundleId} must register native hosts with reg.exe /ve`
+  );
+  assert.equal(
+    installerContents.includes('Set-ItemProperty -Path $RegPath -Name "(default)" -Value $ManifestTarget'),
+    false,
+    `bundle ${bundle.bundleId} must not write registry default values with Set-ItemProperty`
+  );
+}
+
 for (const bundle of manifest.bundles) {
   const bundleDir = path.join(rootDir, bundle.path);
   const checksumPath = path.join(bundleDir, "SHA256SUMS.txt");
@@ -32,6 +45,12 @@ for (const bundle of manifest.bundles) {
   await fs.access(checksumPath);
   await fs.access(manifestTemplatePath);
   await fs.access(path.join(bundleDir, "browser-extension", "manifest.json"));
+
+  if (bundle.bundleId.startsWith("windows-")) {
+    const installerPath = path.join(bundleDir, "install.ps1");
+    await fs.access(installerPath);
+    assertWindowsInstaller(bundle, await fs.readFile(installerPath, "utf8"));
+  }
 
   const checksumLines = (await fs.readFile(checksumPath, "utf8"))
     .split("\n")

@@ -191,8 +191,10 @@ Set-Content -Path $ManifestTarget -Value $ManifestContent -Encoding UTF8
 
 if (-not $SkipNativeHostRegistration) {
   foreach ($RegPath in $RegistryTargets) {
-    New-Item -Path $RegPath -Force | Out-Null
-    Set-ItemProperty -Path $RegPath -Name "(default)" -Value $ManifestTarget
+    $null = & reg.exe add $RegPath /ve /t REG_SZ /d $ManifestTarget /f
+    if ($LASTEXITCODE -ne 0) {
+      throw "Failed to register native messaging host at $RegPath"
+    }
   }
 } else {
   Write-Host "Native host registry registration skipped."
