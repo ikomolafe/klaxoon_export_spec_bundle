@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const endUserDir = path.join(rootDir, "release", "end-user");
 const installersDir = path.join(rootDir, "release", "installers");
-const stageDir = path.join(installersDir, ".stage");
+const stageDir = path.join(rootDir, "release", ".stage", "installers");
 const packageJson = JSON.parse(await fs.readFile(path.join(rootDir, "package.json"), "utf8"));
 const version = packageJson.version;
 
