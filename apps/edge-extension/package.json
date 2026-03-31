@@ -1,6 +1,6 @@
 {
   "name": "@klaxoon/edge-extension",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@klaxoon/shared": "0.1.2",
+    "@klaxoon/shared": "0.1.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
