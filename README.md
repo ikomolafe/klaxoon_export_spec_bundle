@@ -4,6 +4,10 @@ Chromium MV3 extension plus .NET 8 native helper for exporting Klaxoon board PDF
 
 ## What To Download
 
+Current stable release:
+- [`v0.1.3`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/tag/v0.1.3)
+- [Latest release redirect](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/latest)
+
 Recommended downloads are published on the [GitHub Releases page](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases) for tagged versions:
 - installer downloads from the release assets
 - raw bundle downloads from the same release assets if you want the lower-level install scripts
@@ -15,23 +19,23 @@ Repo download locations:
 - local source checkout builds: `release/installers/` and `release/assets/`
 
 Installer files:
-- Windows: `KlaxoonBulkExport-<version>-windows-x64-installer.zip`
-- Linux: `klaxoon-bulk-export_<version>_linux-x64.deb`
-- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64.pkg`
-- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64.pkg`
+- Windows: `KlaxoonBulkExport-0.1.3-windows-x64-installer.zip`
+- Linux: `klaxoon-bulk-export_0.1.3_linux-x64.deb`
+- macOS Apple Silicon: `KlaxoonBulkExport-0.1.3-macos-arm64.pkg`
+- macOS Intel: `KlaxoonBulkExport-0.1.3-macos-x64.pkg`
 
 Raw bundle files:
-- Windows: `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`
-- Linux: `KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz`
-- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64-bundle.tar.gz`
-- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64-bundle.tar.gz`
+- Windows: `KlaxoonBulkExport-0.1.3-windows-x64-bundle.zip`
+- Linux: `KlaxoonBulkExport-0.1.3-linux-x64-bundle.tar.gz`
+- macOS Apple Silicon: `KlaxoonBulkExport-0.1.3-macos-arm64-bundle.tar.gz`
+- macOS Intel: `KlaxoonBulkExport-0.1.3-macos-x64-bundle.tar.gz`
 
 ## Fastest Path
 
 For most users, use the installer for your OS.
 
 ### Windows installer
-1. Download `KlaxoonBulkExport-<version>-windows-x64-installer.zip`.
+1. Download `KlaxoonBulkExport-0.1.3-windows-x64-installer.zip`.
 2. Extract it.
 3. Run `Install.cmd`.
 4. Open `chrome://extensions` for Chrome or Chromium, `edge://extensions` for Edge, or `brave://extensions` for Brave.
@@ -47,8 +51,8 @@ Windows note:
 - The native helper shipped in the Windows x64 installer is self-contained. No separate .NET runtime installation is required on the target PC.
 
 ### Linux installer
-1. Download `klaxoon-bulk-export_<version>_linux-x64.deb`.
-2. Install it with `sudo dpkg -i klaxoon-bulk-export_<version>_linux-x64.deb`.
+1. Download `klaxoon-bulk-export_0.1.3_linux-x64.deb`.
+2. Install it with `sudo dpkg -i klaxoon-bulk-export_0.1.3_linux-x64.deb`.
 3. Open your Chromium browser's extensions page.
 4. Enable `Developer mode`.
 5. Click `Load unpacked`.
@@ -59,8 +63,8 @@ Windows note:
 
 ### macOS installer
 1. Download the `.pkg` that matches your Mac:
-   - Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64.pkg`
-   - Intel: `KlaxoonBulkExport-<version>-macos-x64.pkg`
+   - Apple Silicon: `KlaxoonBulkExport-0.1.3-macos-arm64.pkg`
+   - Intel: `KlaxoonBulkExport-0.1.3-macos-x64.pkg`
 2. Open the package and complete installation.
 3. Open your Chromium browser's extensions page.
 4. Enable `Developer mode`.
@@ -77,13 +81,13 @@ Windows note:
 Use the raw bundle only if you want the lower-level install scripts.
 
 ### Windows raw bundle
-1. Download `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`.
+1. Download `KlaxoonBulkExport-0.1.3-windows-x64-bundle.zip`.
 2. Extract it.
 3. Run `Install.cmd`. If you are automating the install, call `install.ps1` directly.
 4. Load the unpacked extension from the `browser-extension/` folder that the script installs.
 
 ### Linux raw bundle
-1. Download `KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz`.
+1. Download `KlaxoonBulkExport-0.1.3-linux-x64-bundle.tar.gz`.
 2. Extract it.
 3. Run `install.sh`.
 4. Load the unpacked extension from the installed `browser-extension/` folder.

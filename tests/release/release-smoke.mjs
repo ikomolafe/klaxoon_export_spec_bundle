@@ -21,6 +21,7 @@ const packageJson = JSON.parse(await fs.readFile(path.join(rootDir, "package.jso
 const extensionPackageJson = JSON.parse(
   await fs.readFile(path.join(rootDir, "apps", "edge-extension", "package.json"), "utf8")
 );
+const readmeContents = await fs.readFile(path.join(rootDir, "README.md"), "utf8");
 const sourceExtensionManifest = JSON.parse(
   await fs.readFile(path.join(rootDir, "apps", "edge-extension", "public", "manifest.json"), "utf8")
 );
@@ -34,6 +35,27 @@ assert.equal(
   sourceExtensionManifest.version,
   extensionPackageJson.version,
   "source extension manifest version must match apps/edge-extension/package.json"
+);
+assert.equal(readmeContents.includes("<version>"), false, "README must not contain unresolved <version> placeholders");
+assert.equal(
+  readmeContents.includes(`https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/tag/v${packageJson.version}`),
+  true,
+  "README must link to the current tagged release"
+);
+assert.equal(
+  readmeContents.includes("https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/latest"),
+  true,
+  "README must link to the latest release redirect"
+);
+assert.equal(
+  readmeContents.includes(`KlaxoonBulkExport-${packageJson.version}-windows-x64-installer.zip`),
+  true,
+  "README must mention the current Windows installer filename"
+);
+assert.equal(
+  readmeContents.includes(`klaxoon-bulk-export_${packageJson.version}_linux-x64.deb`),
+  true,
+  "README must mention the current Linux installer filename"
 );
 
 function assertWindowsInstaller(bundle, installerContents) {
