@@ -142,4 +142,4 @@ Runtime exports are written under a normalized output tree:
 
 ## More Detail
 
-See [INSTALL](/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/docs/INSTALL.md), [DISTRIBUTION](/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/docs/DISTRIBUTION.md), [SECURITY](/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/docs/SECURITY.md), and [SUPPORT](/Users/citadel03/LinuxOSWork/AI/klaxoon_export_spec_bundle/klaxoon-bulk-export/docs/SUPPORT.md).
+See [INSTALL](docs/INSTALL.md), [DISTRIBUTION](docs/DISTRIBUTION.md), [SECURITY](docs/SECURITY.md), and [SUPPORT](docs/SUPPORT.md).
