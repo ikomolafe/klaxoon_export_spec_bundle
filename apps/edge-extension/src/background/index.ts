@@ -34,6 +34,7 @@ import {
 import { pingHelper, sendHelperMessage } from "../lib/helperClient";
 import { selectorRegistry, type SelectorSet } from "../lib/selectorRegistry";
 import { klaxoonEntryUrl, probeKlaxoonSession, type KlaxoonAuthStatus } from "../lib/session";
+import { runZoomMenuActionInPage } from "../lib/zoomMenuAutomation";
 
 type ManifestArtifactEntry = {
   id: string;
@@ -2207,104 +2208,12 @@ async function fitBoardToScreen(tabId: number): Promise<{ applied: boolean; deta
   const [result] = await chrome.scripting.executeScript({
     target: { tabId },
     world: "MAIN",
-    func: async (selectors: SelectorSet) => {
-      const interactiveSelector = "button, [role='button'], [role='menuitem'], [role='option'], a";
-
-      const isVisible = (element: HTMLElement | null) => {
-        if (!element) {
-          return false;
-        }
-
-        const style = window.getComputedStyle(element);
-        return style.display !== "none" && style.visibility !== "hidden";
-      };
-
-      const getContent = (element: HTMLElement) =>
-        [
-          element.innerText,
-          element.textContent,
-          element.getAttribute("aria-label"),
-          element.getAttribute("title"),
-          element.getAttribute("data-testid")
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .replace(/\s+/g, " ")
-          .trim()
-          .toLowerCase();
-
-      const activate = (candidate: HTMLElement) => {
-        candidate.scrollIntoView({ block: "center", inline: "center" });
-        candidate.focus?.();
-        candidate.click();
-      };
-
-      const firstMatch = (entries: string[]) => {
-        for (const selector of entries) {
-          const match = document.querySelector<HTMLElement>(selector);
-          if (isVisible(match)) {
-            return match;
-          }
-        }
-
-        return null;
-      };
-
-      const interactive = () =>
-        Array.from(document.querySelectorAll<HTMLElement>(interactiveSelector)).filter((candidate) => isVisible(candidate));
-
-      const containsHint = (content: string, hints: string[]) => hints.some((hint) => content.includes(hint));
-
-      const findByHints = (hints: string[], excludeHints: string[] = []) =>
-        interactive().find((candidate) => {
-          const content = getContent(candidate);
-          return containsHint(content, hints) && !containsHint(content, excludeHints);
-        }) ?? null;
-
-      const waitForFitOption = async (timeoutMs: number) => {
-        const direct = firstMatch(selectors.zoomToFitBoardOption);
-        if (direct) {
-          return direct;
-        }
-
-        const startedAt = Date.now();
-        while (Date.now() - startedAt < timeoutMs) {
-          const option = findByHints(["zoom to fit board"]);
-          if (option) {
-            return option;
-          }
-
-          await new Promise((resolve) => window.setTimeout(resolve, 100));
-        }
-
-        return null;
-      };
-
-      const zoomTrigger =
-        firstMatch(selectors.zoomMenuButton) ??
-        findByHints(["zoom"], ["zoom to"]) ??
-        interactive().find((candidate) => /\b\d{1,3}\s*%/.test(getContent(candidate))) ??
-        null;
-
-      if (!zoomTrigger) {
-        return { applied: false, detail: "zoom-trigger-not-found" };
-      }
-
-      activate(zoomTrigger);
-      const fitOption = await waitForFitOption(2_000);
-      if (!fitOption) {
-        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-        return { applied: false, detail: "zoom-to-fit-option-not-found" };
-      }
-
-      activate(fitOption);
-      await new Promise((resolve) => window.setTimeout(resolve, 300));
-      return { applied: true, detail: "zoom-to-fit-board" };
-    },
-    args: [selectorRegistry.default]
+    func: runZoomMenuActionInPage,
+    args: [selectorRegistry.default, "fit-board"]
   });
 
-  return result?.result ?? { applied: false, detail: "zoom-fit-unavailable" };
+  const zoomResult = result?.result;
+  return zoomResult ? { applied: zoomResult.ok, detail: zoomResult.detail } : { applied: false, detail: "zoom-fit-unavailable" };
 }
 
 async function applyZoomToFitBoardForPass(input: {
@@ -2330,7 +2239,7 @@ async function selectAllBoardContent(tabId: number): Promise<{ attempted: boolea
     target: { tabId },
     world: "MAIN",
     func: async (selectors: SelectorSet) => {
-      const interactiveSelector = "button, [role='button'], [role='menuitem'], [role='option'], a";
+      const interactiveSelector = "button, [role='button'], [role='menuitem'], [role='option'], [role='combobox'], [tabindex]:not([tabindex='-1']), a";
 
       const firstMatch = (entries: string[]) => {
         for (const selector of entries) {
@@ -2429,50 +2338,32 @@ async function selectAllBoardContent(tabId: number): Promise<{ attempted: boolea
       dispatchShortcut(document, 2);
       dispatchShortcut(document.body, 1);
       await new Promise((resolve) => window.setTimeout(resolve, 400));
-
-      const openZoomMenu = () => {
-        const zoomTrigger =
-          firstMatch(selectors.zoomMenuButton) ??
-          findByHints(["zoom"], ["zoom to"]) ??
-          interactive().find((candidate) => /\b\d{1,3}\s*%/.test(getContent(candidate))) ??
-          null;
-        if (!zoomTrigger) {
-          return false;
-        }
-
-        activate(zoomTrigger);
-        return true;
-      };
-
-      let selectionDetected = false;
-      if (openZoomMenu()) {
-        const startedAt = Date.now();
-        while (Date.now() - startedAt < 1_000) {
-          const direct = firstMatch(selectors.zoomToSelectionOption);
-          const hinted = findByHints(["zoom to selection"]);
-          if (direct ?? hinted) {
-            selectionDetected = true;
-            break;
-          }
-
-          await new Promise((resolve) => window.setTimeout(resolve, 100));
-        }
-
-        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-      }
-
       return {
         attempted: true,
-        confirmed: selectionDetected,
-        detail: selectionDetected
-          ? `${selectTool ? "select-tool-activated" : "select-tool-unavailable"}; selection-detected`
-          : `${selectTool ? "select-tool-activated" : "select-tool-unavailable"}; selection-not-confirmed`
+        detail: `${selectTool ? "select-tool-activated" : "select-tool-unavailable"}; selection-shortcut-dispatched`
       };
     },
     args: [selectorRegistry.default]
   });
 
-  return result?.result ?? { attempted: false, confirmed: false, detail: "select-all-unavailable" };
+  const selectionPrep = result?.result ?? { attempted: false, detail: "select-all-unavailable" };
+  if (!selectionPrep.attempted) {
+    return { attempted: false, confirmed: false, detail: selectionPrep.detail };
+  }
+
+  const [zoomResult] = await chrome.scripting.executeScript({
+    target: { tabId },
+    world: "MAIN",
+    func: runZoomMenuActionInPage,
+    args: [selectorRegistry.default, "detect-selection"]
+  });
+
+  const selectionDetection = zoomResult?.result ?? { ok: false, detail: "zoom-selection-check-unavailable" };
+  return {
+    attempted: true,
+    confirmed: selectionDetection.ok,
+    detail: `${selectionPrep.detail}; ${selectionDetection.ok ? "selection-detected" : selectionDetection.detail}`
+  };
 }
 
 async function ensurePresenterMode(tabId: number): Promise<PresenterModeState> {

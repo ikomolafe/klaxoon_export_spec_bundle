@@ -1,11 +1,12 @@
 # Installation Guide Linux
 
-## Bundle
-Use `release/end-user/linux-x64/`.
+## Installer
+Use `release/installers/klaxoon-bulk-export_<version>_linux-x64.deb`.
+For end users, the preferred download source is the GitHub `Releases` page for the tagged version.
 
 ## Steps
-1. Run `install.sh` from the bundle.
-2. Load the `browser-extension/` directory printed by the script into Google Chrome, Microsoft Edge, Brave, or Chromium.
+1. Install the package with `sudo dpkg -i klaxoon-bulk-export_<version>_linux-x64.deb`.
+2. Load `~/.local/share/klaxoon-bulk-export/linux-x64/browser-extension` into Google Chrome, Microsoft Edge, Brave, or Chromium.
 3. Confirm the native messaging manifests were created under the supported Chromium browser config directories.
 4. Sign in to Klaxoon in that browser profile.
 5. Open the side panel, choose a folder if required, and start a PDF export.

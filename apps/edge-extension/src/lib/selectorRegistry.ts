@@ -29,15 +29,31 @@ export const selectorRegistry: Record<string, SelectorSet> = {
     boardReady: ["[data-testid='board-root']", "main"],
     zoomMenuButton: [
       "button[aria-label*='Zoom']",
-      "button[title*='Zoom']"
+      "[role='button'][aria-label*='Zoom']",
+      "[role='combobox'][aria-label*='Zoom']",
+      "[aria-haspopup='menu'][aria-label*='Zoom']",
+      "[aria-haspopup='listbox'][aria-label*='Zoom']",
+      "button[title*='Zoom']",
+      "[role='button'][title*='Zoom']",
+      "[role='combobox'][title*='Zoom']",
+      "[data-testid*='zoom']",
+      "[data-testid*='Zoom']"
     ],
     zoomToSelectionOption: [
       "[role='menuitem'][aria-label*='Zoom to selection']",
-      "[role='option'][aria-label*='Zoom to selection']"
+      "[role='option'][aria-label*='Zoom to selection']",
+      "[role='menuitem'][title*='Zoom to selection']",
+      "[role='option'][title*='Zoom to selection']",
+      "button[aria-label*='Zoom to selection']",
+      "button[title*='Zoom to selection']"
     ],
     zoomToFitBoardOption: [
       "[role='menuitem'][aria-label*='Zoom to fit board']",
-      "[role='option'][aria-label*='Zoom to fit board']"
+      "[role='option'][aria-label*='Zoom to fit board']",
+      "[role='menuitem'][title*='Zoom to fit board']",
+      "[role='option'][title*='Zoom to fit board']",
+      "button[aria-label*='Zoom to fit board']",
+      "button[title*='Zoom to fit board']"
     ],
     selectToolButton: [
       "button[aria-label*='Select']",

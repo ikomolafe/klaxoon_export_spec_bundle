@@ -1,11 +1,12 @@
 # Installation Guide macOS
 
-## Bundle
-Use `release/end-user/macos-arm64/` for Apple Silicon or `release/end-user/macos-x64/` for Intel Macs.
+## Installer
+Use `release/installers/KlaxoonBulkExport-<version>-macos-arm64.pkg` for Apple Silicon or `release/installers/KlaxoonBulkExport-<version>-macos-x64.pkg` for Intel Macs.
+For end users, the preferred download source is the GitHub `Releases` page for the tagged version.
 
 ## Steps
-1. Run `install.sh` from the selected bundle.
-2. Load the `browser-extension/` directory printed by the script into Google Chrome, Microsoft Edge, Brave, or Chromium.
+1. Open the matching `.pkg` and complete installation.
+2. Load `~/Library/Application Support/KlaxoonBulkExport/<bundle-id>/browser-extension` into Google Chrome, Microsoft Edge, Brave, or Chromium.
 3. Confirm the native messaging manifest was written to the current user's supported Chromium browser native messaging directories.
 4. Sign in to Klaxoon in that browser profile.
 5. Open the side panel, choose a folder if required, and start a PDF export.

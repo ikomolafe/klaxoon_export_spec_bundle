@@ -1,0 +1,39 @@
+name: github-release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npm test
+      - run: npm run test:helper
+      - run: npm run package:enduser
+      - run: npm run test:release
+      - run: npm run test:release-install
+      - run: npm run package:installers
+      - run: npm run package:release-assets
+      - uses: actions/upload-artifact@v4
+        with:
+          name: github-release-assets
+          path: release/assets
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            release/assets/*

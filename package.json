@@ -12,6 +12,8 @@
     "build:helper": "node scripts/run-dotnet-command.mjs build apps/native-helper/Klaxoon.NativeHelper/Klaxoon.NativeHelper.csproj",
     "dev:register-host": "node scripts/register-dev-host.mjs",
     "package:enduser": "node scripts/package-enduser.mjs",
+    "package:installers": "node scripts/package-installers.mjs",
+    "package:release-assets": "node scripts/package-release-assets.mjs",
     "test": "npm run test -w @klaxoon/shared && npm run test -w @klaxoon/edge-extension && npm run test -w @klaxoon/e2e",
     "test:helper": "node scripts/run-dotnet-command.mjs test apps/native-helper/Klaxoon.NativeHelper.Tests/Klaxoon.NativeHelper.Tests.csproj",
     "test:release": "node tests/release/release-smoke.mjs",

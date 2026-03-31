@@ -5,6 +5,40 @@
 - Node.js 20+ for local development
 - .NET 8 SDK for local helper development
 
+## End-user installers
+Generate installers with:
+
+```sh
+npm run package:installers
+npm run package:release-assets
+```
+
+Download locations:
+- GitHub `Releases` for tagged versions
+- GitHub Actions artifact from `release-bundles` for branch builds
+- local source checkout output under `release/installers/` and `release/assets/`
+
+Recommended install path by OS:
+- Windows: extract `KlaxoonBulkExport-<version>-windows-x64-installer.zip`, then run `Install.cmd`
+- Linux: run `sudo dpkg -i klaxoon-bulk-export_<version>_linux-x64.deb`
+- macOS: open the matching `.pkg` for Apple Silicon or Intel
+
+Installed extension locations:
+- Windows: `%LOCALAPPDATA%\\KlaxoonBulkExport\\browser-extension`
+- Linux: `~/.local/share/klaxoon-bulk-export/linux-x64/browser-extension`
+- macOS Apple Silicon: `~/Library/Application Support/KlaxoonBulkExport/macos-arm64/browser-extension`
+- macOS Intel: `~/Library/Application Support/KlaxoonBulkExport/macos-x64/browser-extension`
+
+After install, load that `browser-extension` folder in Chrome, Edge, Brave, or Chromium.
+
+Recommended user flow in the browser:
+1. Open `chrome://extensions`, `edge://extensions`, `brave://extensions`, or `chrome://extensions` for Chromium.
+2. Enable `Developer mode`.
+3. Click `Load unpacked`.
+4. Select the installed `browser-extension` folder for your OS.
+5. Sign in to Klaxoon in that same browser profile.
+6. Open the side panel and export PDFs.
+
 ## Local development
 1. Run `npm install` at the repository root.
 2. Run `npm run dev:register-host`.
@@ -108,14 +142,18 @@ The helper host must be registered under the current user before the extension c
 - If you loaded `apps/edge-extension` instead of `apps/edge-extension/build/extension`, native messaging will not match the expected extension ID.
 
 ## End-user bundles
-1. Run `npm run package:enduser`.
-2. Pick the OS-specific folder under `release/end-user/`.
-3. Run the included installer script for that OS:
-   - Windows: `install.ps1`
-   - Linux/macOS: `install.sh`
-4. Load the bundled `browser-extension/` folder in a supported Chromium browser.
+`npm run package:enduser` still produces the raw per-OS bundle directories under `release/end-user/`. The installer layer wraps those bundles into:
+- a Windows installer archive with `Install.cmd`
+- a Linux `.deb`
+- macOS `.pkg` installers
 
-The release bundle includes a self-contained native helper, browser extension assets, and native messaging manifest/install scaffolding for the target OS.
+Use the raw bundles only when you explicitly want the lower-level install scripts.
+
+Release asset archives are also generated for those raw bundles:
+- Windows: `KlaxoonBulkExport-<version>-windows-x64-bundle.zip`
+- Linux: `KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz`
+- macOS Apple Silicon: `KlaxoonBulkExport-<version>-macos-arm64-bundle.tar.gz`
+- macOS Intel: `KlaxoonBulkExport-<version>-macos-x64-bundle.tar.gz`
 
 ## Validation
 - Release packaging is validated in CI on Windows x64, Linux x64, macOS Intel, and macOS Apple Silicon.

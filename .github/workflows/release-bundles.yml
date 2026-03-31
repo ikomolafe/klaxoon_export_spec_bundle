@@ -39,7 +39,21 @@ jobs:
       - run: npm run package:enduser
       - run: npm run test:release
       - run: npm run test:release-install
+      - if: runner.os == 'macOS' && matrix.label == 'macos-arm64'
+        run: npm run package:installers
+      - if: runner.os == 'macOS' && matrix.label == 'macos-arm64'
+        run: npm run package:release-assets
       - uses: actions/upload-artifact@v4
         with:
           name: klaxoon-end-user-bundles-${{ matrix.label }}
           path: release/end-user
+      - if: runner.os == 'macOS' && matrix.label == 'macos-arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: klaxoon-installers
+          path: release/installers
+      - if: runner.os == 'macOS' && matrix.label == 'macos-arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: klaxoon-release-assets
+          path: release/assets

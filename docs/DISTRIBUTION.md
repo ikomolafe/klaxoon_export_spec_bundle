@@ -1,13 +1,13 @@
 # Distribution
 
 ## Goal
-Produce self-contained end-user bundles for:
+Produce self-contained end-user bundles and user-facing installers for:
 - Windows `win-x64`
 - Linux `linux-x64`
 - macOS `osx-arm64`
 - macOS `osx-x64`
 
-Each bundle contains:
+Each raw bundle contains:
 - A bundled Chromium extension with all JavaScript dependencies compiled into the shipped files
 - A self-contained single-file native helper for the target runtime
 - A native messaging host manifest template
@@ -20,13 +20,20 @@ Run:
 
 ```sh
 npm run package:enduser
+npm run package:installers
+npm run package:release-assets
 ```
 
-Artifacts are generated under `release/end-user/`.
+Artifacts are generated under:
+- `release/end-user/` for the raw bundles
+- `release/installers/` for the user-facing installers
+- `release/assets/` for GitHub-release-ready downloadable files
 
 ## Validation workflow
 - `.github/workflows/release-bundles.yml` runs on `ubuntu-latest`, `windows-latest`, `macos-13`, and `macos-14`.
 - Each runner executes unit tests, helper tests, `package:enduser`, bundle-structure smoke checks, and an install smoke test for its own OS family.
+- The Apple Silicon macOS runner also generates the installer artifacts under `release/installers/`.
+- Tagged releases can be published through `.github/workflows/github-release.yml`, which builds the release assets and uploads them to the GitHub Releases page.
 - That keeps packaging, install layout, and native-host registration logic under continuous verification without changing the runtime architecture.
 
 ## Release structure
@@ -50,6 +57,24 @@ release/
       ...
     macos-x64/
       ...
+  installers/
+    KlaxoonBulkExport-<version>-windows-x64-installer.zip
+    klaxoon-bulk-export_<version>_linux-x64.deb
+    KlaxoonBulkExport-<version>-macos-arm64.pkg
+    KlaxoonBulkExport-<version>-macos-x64.pkg
+    release-manifest.json
+  assets/
+    KlaxoonBulkExport-<version>-windows-x64-installer.zip
+    klaxoon-bulk-export_<version>_linux-x64.deb
+    KlaxoonBulkExport-<version>-macos-arm64.pkg
+    KlaxoonBulkExport-<version>-macos-x64.pkg
+    KlaxoonBulkExport-<version>-windows-x64-bundle.zip
+    KlaxoonBulkExport-<version>-linux-x64-bundle.tar.gz
+    KlaxoonBulkExport-<version>-macos-arm64-bundle.tar.gz
+    KlaxoonBulkExport-<version>-macos-x64-bundle.tar.gz
+    end-user-manifest.json
+    installer-manifest.json
+    release-assets.json
 ```
 
 ## Runtime export structure
@@ -92,6 +117,19 @@ The generated installers now support controlled override roots for automation an
   - `KD_NATIVE_HOST_ROOT=<path>`
 
 These overrides are used by the release install smoke test so CI can validate installation without touching a developer's normal browser-profile paths.
+
+## Installer formats
+- Windows currently ships as a zip installer bundle containing `Install.cmd` plus the self-contained payload.
+- Linux ships as a `.deb` that installs the payload under `/opt/klaxoon-bulk-export/<bundle-id>/bundle` and then applies the per-user browser registration under the desktop user.
+- macOS ships as `.pkg` installers that stage the payload under `/Library/Application Support/KlaxoonBulkExport/<bundle-id>/bundle` and then apply the per-user browser registration for the logged-in console user.
+
+The installers embed the helper and extension payloads. The browser extension still needs to be loaded from the installed `browser-extension/` directory because store/policy distribution is not yet part of the release pipeline.
+
+## GitHub release download path
+- Push a tag such as `v0.1.0`.
+- `.github/workflows/github-release.yml` builds, validates, packages, and uploads the contents of `release/assets/` to the GitHub Releases page for that tag.
+- End users should prefer the installer assets from that release page.
+- Advanced users can download the raw bundle archives from the same release if they want the lower-level install scripts.
 
 ## Signing hooks
 Optional signing hooks are available through:
