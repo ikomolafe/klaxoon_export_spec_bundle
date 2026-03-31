@@ -4,27 +4,27 @@ Chromium MV3 extension plus .NET 8 native helper for exporting Klaxoon board PDF
 
 ## What To Download
 
-Recommended downloads are published on the GitHub Releases page for tagged versions:
+Recommended downloads are published on the [GitHub Releases page](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases) for tagged versions:
 - installer downloads from the release assets
 - raw bundle downloads from the same release assets if you want the lower-level install scripts
 
 Repo download locations:
-- tagged releases: GitHub `Releases`
-- branch builds: GitHub Actions artifact from the `release-bundles` workflow
+- tagged releases: [GitHub Releases](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases)
+- branch builds: [GitHub Actions `release-bundles` workflow](https://github.com/ikomolafe/klaxoon_export_spec_bundle/actions/workflows/release-bundles.yml)
 - committed download folder in this repo: [`release/assets/`](release/assets/)
 - local source checkout builds: `release/installers/` and `release/assets/`
 
 Installer files:
-- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-installer.zip`](release/assets/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip)
-- Linux: [`klaxoon-bulk-export_0.1.1_linux-x64.deb`](release/assets/klaxoon-bulk-export_0.1.1_linux-x64.deb)
-- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64.pkg`](release/assets/KlaxoonBulkExport-0.1.1-macos-arm64.pkg)
-- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64.pkg`](release/assets/KlaxoonBulkExport-0.1.1-macos-x64.pkg)
+- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-installer.zip`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-windows-x64-installer.zip)
+- Linux: [`klaxoon-bulk-export_0.1.1_linux-x64.deb`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/klaxoon-bulk-export_0.1.1_linux-x64.deb)
+- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64.pkg`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-arm64.pkg)
+- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64.pkg`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-x64.pkg)
 
 Raw bundle files:
-- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip`](release/assets/KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip)
-- Linux: [`KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz)
-- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz)
-- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz`](release/assets/KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz)
+- Windows: [`KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-windows-x64-bundle.zip)
+- Linux: [`KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-linux-x64-bundle.tar.gz)
+- macOS Apple Silicon: [`KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-arm64-bundle.tar.gz)
+- macOS Intel: [`KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz`](https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v0.1.1/KlaxoonBulkExport-0.1.1-macos-x64-bundle.tar.gz)
 
 ## Fastest Path
 
