@@ -304,7 +304,7 @@ async function writeManifest(entries) {
 }
 
 await ensureEndUserBundles();
-await fs.mkdir(installersDir, { recursive: true });
+await resetDirectory(installersDir);
 await fs.mkdir(stageDir, { recursive: true });
 
 const installers = [];
