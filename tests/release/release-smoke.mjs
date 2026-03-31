@@ -57,6 +57,21 @@ assert.equal(
   true,
   "README must mention the current Linux installer filename"
 );
+assert.equal(
+  readmeContents.includes(`https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v${packageJson.version}/KlaxoonBulkExport-${packageJson.version}-windows-x64-installer.zip`),
+  true,
+  "README must include a direct Windows installer download link for the current release"
+);
+assert.equal(
+  readmeContents.includes(`https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v${packageJson.version}/klaxoon-bulk-export_${packageJson.version}_linux-x64.deb`),
+  true,
+  "README must include a direct Linux installer download link for the current release"
+);
+assert.equal(
+  readmeContents.includes(`https://github.com/ikomolafe/klaxoon_export_spec_bundle/releases/download/v${packageJson.version}/KlaxoonBulkExport-${packageJson.version}-windows-x64-bundle.zip`),
+  true,
+  "README must include a direct Windows raw bundle download link for the current release"
+);
 
 function assertWindowsInstaller(bundle, installerContents) {
   assert.equal(
